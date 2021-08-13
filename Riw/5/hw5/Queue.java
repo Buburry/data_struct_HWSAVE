@@ -12,13 +12,13 @@ public class Queue {
         arr = new Node[cap];
         size = 0;
         front = size;
-        back = front;
+        back = front - 1;
     }
     
     public void enqueue(Node node){
         if (!isFull()) {
-            arr[back] = node;
             back = (back + 1) % capacity;
+            arr[back] = node;
             size++;
             //System.out.println(front + " " + back + " " + size);
         }
@@ -56,14 +56,12 @@ public class Queue {
     public void printQueue(){
         if (!isEmpty()){
             System.out.print("[Front] ");
-
-            int last = (back - 1) % capacity;
             
-            for (int i = front; i != last; i = (i+1) % capacity) {
+            for (int i = front; i != back; i = (i+1) % capacity) {
                 System.out.print(arr[i].data + " ");
             }
-            System.out.print(arr[last].data + " ");
-            
+            System.out.print(arr[back].data + " ");
+
             System.out.println("[Back]");
         } else{
             System.out.println("Empty Queue!!!");

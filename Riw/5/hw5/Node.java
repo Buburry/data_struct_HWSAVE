@@ -2,8 +2,9 @@ package hw5;
 
 public class Node extends BTreePrinter { // Fix this line
 
-    Node left;
-    Node right;
+    // public for testing only
+    public Node left;
+    public Node right;
     public int data;
 
     public Node(int data) {
@@ -18,20 +19,18 @@ public class Node extends BTreePrinter { // Fix this line
         Queue q = new Queue(50);
         System.out.print("BFT node sequence [ ");
         
-        Node l = left;
-        Node r = right;
-        while (l != null || r != null) {
-            if (l != null) {
-                q.enqueue(l);
-                l = l.left;
+        q.enqueue(this);
+        while(q.size != 0) {
+            Node t = q.dequeue();
+            System.out.print(t.data + " ");
+            
+            if (t.left != null) {
+                q.enqueue(t.left);
             }
-            if (r != null) {
-                q.enqueue(r);
-                r = r.right;
+            if (t.right != null) {
+                q.enqueue(t.right);
             }
         }
-        
-        q.printQueue();
         
         System.out.println("]");
     }
@@ -39,7 +38,19 @@ public class Node extends BTreePrinter { // Fix this line
     public void printDFT() { // PreOrder
         Stack s = new Stack(50);
         System.out.print("DFT node sequence [ ");
-        // Do something
+        
+        s.push(this);
+        while (s.size != 0) {
+            Node t = s.pop();
+            System.out.print(t.data + " ");
+            
+            if (t.right != null) {
+                 s.push(t.right);
+            }
+            if (t.left != null) {
+                s.push(t.left);
+            }
+        }
         System.out.println("]");
     }
 }
