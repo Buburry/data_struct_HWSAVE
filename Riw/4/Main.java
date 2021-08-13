@@ -1,18 +1,18 @@
-import hw5.*;
+import hw4.*;
 
 public class Main {
-    
+
     public static void main(String[] args) {
-        Queue q = new Queue(4);
-        q.enqueue(new Node(5));
-        q.enqueue(new Node(6));
-        q.enqueue(new Node(7));
-        q.enqueue(new Node(8));
-        System.out.println(q.dequeue().data);
-        q.enqueue(new Node(13));
-        System.out.println(q.dequeue().data);
-        q.enqueue(new Node(14));
-        q.printCircularIndices();
-        q.printQueue();
+        // TODO code application logic here
+        	
+        Stock ptt = new Stock("FIFO");
+        ptt.buy(10, 100);
+        ptt.buy(10, 150);
+        ptt.buy(20, 110);
+        ptt.buy(20, 160);
+        ptt.showList();
+        ptt.sell(25, 130);
+        ptt.showList();
     }
+    
 }
