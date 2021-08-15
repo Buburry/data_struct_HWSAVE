@@ -29,29 +29,35 @@ public class Stock {
             double unrealizedGain = 0.0;
 
             int shr = soldShares;
+            
             while (shr > 0 && list.top() != null) {
-                Node record = list.top();
+                Node position = list.top();
                 
-                if (shr < record.shares) {
-                    record.shares -= shr;
-                    realizedGain += (soldPrice - record.price) * shr; 
+                /* if remaining soldShares is less than position shares,
+                we only sell the remaining shares from position shares
+                otherwise, sell all position shares.
+                */
+                if (shr < position.shares) {
+                    position.shares -= shr;
+                    realizedGain += (soldPrice - position.price) * shr; 
                     shr -= shr;
                 }
                 else {
-                    realizedGain += (soldPrice - record.price) * record.shares; 
-                    shr -= record.shares;
+                    realizedGain += (soldPrice - position.price) * position.shares; 
+                    shr -= position.shares;
                     list.pop();
                 }
             }
-
+            
+            // calculate unrealized gain from remaining position in list.
             for (Node curr = list.top(); curr != null; curr = curr.next) {
                 unrealizedGain += (soldPrice - curr.price) * curr.shares;
             }
             
-            
             totalShares -= soldShares;
             System.out.println("Realized P/L = " + realizedGain + " Unrealized P/L = " + unrealizedGain);
-        }else{
+        }
+        else {
             System.out.println("Sell command rejected");
         }
     }
