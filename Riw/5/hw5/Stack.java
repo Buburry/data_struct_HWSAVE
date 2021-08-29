@@ -5,12 +5,14 @@ public class Stack {
     int capacity;
     int size;
 
+    // initialize an array
     public Stack(int cap){
         capacity = cap;
         arr = new Node[cap];
         size = 0;
     }
     
+    // pushBack so top of stack is at the end of array
     public void push(Node node){
         if (!isFull()){
             arr[size] = node;
@@ -19,6 +21,8 @@ public class Stack {
             System.out.println("Stack Overflow!!!");
         }
     }
+    
+    // popBack to get top of stack
     public Node pop(){
         if (!isEmpty()){
             Node temp = arr[size - 1];
@@ -26,16 +30,17 @@ public class Stack {
             return temp;
         }else{
             System.out.println("Stack Underflow!!!");
-            return null; // fix this (out of place)
+            return null;
         }
     }
     public boolean isFull(){
-        return size == capacity; // fix this
+        return size == capacity;
     }
     public boolean isEmpty(){
-        return size == 0; // fix this
+        return size == 0; 
     }
     
+    // print stack from bottom to top
     public void printStack(){
         if (!isEmpty()) {
             System.out.print("[Bottom] ");
