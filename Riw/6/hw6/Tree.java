@@ -1,5 +1,5 @@
 package hw6;
-// This Tree needs to inherit BTreePrinter
+
 public class Tree extends BTreePrinter { 
     Node root;
       
@@ -8,7 +8,7 @@ public class Tree extends BTreePrinter {
     }
     
     public Tree(){} // Dummy constructor (No need to edit)
-    
+       
     public void printTree(){
         if (root != null) super.printTree(root);
         else System.out.println("Empty tree!!!");
@@ -24,8 +24,12 @@ public class Tree extends BTreePrinter {
     }
     
     public static Node find(Node node, int search_key){
+        /* we check if we already find the node we want,
+        else go left if search_key < this node key and
+        go right if search_key >= this node key. */
+
         if (node.key == search_key) return node;
-        if (node.left != null && search_key <= node.key) return find(node.left, search_key);
+        if (node.left != null && search_key < node.key) return find(node.left, search_key);
         else if (node.right != null && search_key >= node.key) return find(node.right, search_key);
         
         return null;
@@ -36,6 +40,7 @@ public class Tree extends BTreePrinter {
     }
     
     public static Node findMin(Node node){
+        // just go to leftmost node
         if (node == null) return null;
         
         if (node.left == null) return node;
@@ -48,6 +53,7 @@ public class Tree extends BTreePrinter {
     }
     
     public static Node findMax(Node node){
+        // just go to rightmost node
         if (node == null) return null;
         
         if (node.right == null) return node;
@@ -60,7 +66,11 @@ public class Tree extends BTreePrinter {
     }
     
     public static Node findClosestLeaf(Node node, int search_key){
-        
+        /* This function find closest node that are not full
+        if this node is leaf return it,
+        if search_key < node key we check if left child is empty first and if not we go left, 
+        if search_key >= node key same as above line. */
+
         if (node.right == null && node.left == null) return node;
         
         if (search_key < node.key) {
@@ -75,8 +85,10 @@ public class Tree extends BTreePrinter {
     }
     
     public Node findClosest(int search_key){
-        // Please use while loop to implement this function
-        // Try not to use recursion
+        /* find closest node to the search_key
+        we loop through this tree and always check the difference between search_key and current node key. 
+        if diff is less than min_diff we store this node and replace min_diff.
+        and we continue to go down this tree untill we reach leaf node.*/
         
         Node current, closest;
         closest = current = root;
@@ -103,11 +115,12 @@ public class Tree extends BTreePrinter {
         return closest;
     }
     
-    // Implement this function using the findClosestLeaf technique
-    // Do not implement the recursive function
     public void insert(int key) {
-        // Implement insert() using the non-recursive version
-        // This function should call findClosestLeaf()
+        /* if tree is empty just set root to new node else,
+        we find closest node that is not full by calling findClosestLeaft()
+        and we check if key < closestNotFull we insert new node to the left of closestNotFull
+        else we insert new node to the right of closestNotFull */
+
         if (root == null) {
             root = new Node(key);
         } else {
@@ -133,6 +146,10 @@ public class Tree extends BTreePrinter {
     }
     
     public static void printPreOrderDFT(Node node){
+        /* 1. Visit the root.
+           2. Traverse the left subtree, i.e., call Preorder(left-subtree)
+           3. Traverse the right subtree, i.e., call Preorder(right-subtree) 
+        */
         if (node == null) return;
         
         System.out.print(node.key + " ");
@@ -147,6 +164,11 @@ public class Tree extends BTreePrinter {
     }
     
     public static void printInOrderDFT(Node node){
+        /* 1. Traverse the left subtree, i.e., call Inorder(left-subtree)
+           2. Visit the root.
+           3. Traverse the right subtree, i.e., call Inorder(right-subtree)
+        */
+
         if (node == null) return;
         printInOrderDFT(node.left);
         System.out.print(node.key + " ");
@@ -161,6 +183,11 @@ public class Tree extends BTreePrinter {
     }
     
     public static void printPostOrderDFT(Node node){
+        /* 1. Traverse the left subtree, i.e., call Postorder(left-subtree)
+           2. Traverse the right subtree, i.e., call Postorder(right-subtree)
+           3. Visit the root.
+        */
+
         if (node == null) return;
         printPostOrderDFT(node.left);
         printPostOrderDFT(node.right);
@@ -168,38 +195,32 @@ public class Tree extends BTreePrinter {
     }
 
     public static int height(Node node){
-        // Use recursion to implement this function
-        if (node == null) return -1;
-        else return Math.max(height(node.left), height(node.right)) + 1;
+        // get the max of the max of left and right subtrees height and add 1 
+        if (node == null) return 0;
+        return Math.max(height(node.left), height(node.right)) + 1;
     }
     
     public static int size(Node node){
-        // Use recursion to implement this function
-        // size = #children + 1(itself)
+        // size = number of children + 1(itself)
         if (node == null) return 0;
         return 1 + size(node.left) + size(node.right);
     }
     
     public static int depth(Node root, Node node){
-        // Use recursion to implement this function
-        // Similar to height() but start from node, go up to root
-        // depth = length(path{node->root})
+        // go from node to root and count path along the ways.
         if (node == root) return 0;
         return 1 + depth(root, node.parent);
     }
     
-    public int height(){ // Tree height
-        // Hint: call the static function
+    public int height() { 
         return height(root);
     }
     
-    public int size(){ // Tree size
-        // Hint: call the static function
+    public int size(){ 
         return size(root);
     }
     
-    public int depth(){ // Tree depth
-        // Hint: call the static function
+    public int depth(){ 
         return height(root);
     }
     
@@ -216,18 +237,22 @@ public class Tree extends BTreePrinter {
     }
 
     public static Node findNext(Node node){
-        //this function should call other functions
+        /* if node has right sub-tree the minimum object in that sub-tree is the next-largest object 
+        If there is no right sub-tree, the next largest object (if any) 
+        should be somewhere in the path from the node to the root */
         
         if (node.right != null) return leftDescendant(node.right);
         else return rightAncestor(node);
     }
     
-    public static Node leftDescendant(Node node){// Case 1 (findMin)
+    public static Node leftDescendant(Node node){
+        // findMin
         if (node.left == null) return node;
         else return leftDescendant(node.left);
     }
     
-    public static Node rightAncestor(Node node) {// Case 1 (first right parent)
+    public static Node rightAncestor(Node node) {
+        // Keep going up and check if node.key < node.parent
         if (node.parent == null) return null;
 
         if (node.key < node.parent.key) return node.parent;
@@ -235,8 +260,9 @@ public class Tree extends BTreePrinter {
     }
     
     public List rangeSearch(int x, int y){
-        // This function utilizes findCloest() and findNext()
-        // Use list.append(node) to add node to the list
+        /* create list to store node and find closest node to x and append it
+        and we continue to find next node and append it untill we exceed y
+        */
         List nodeList = new List(100); 
         Node n = findClosest(x);
         
@@ -248,16 +274,13 @@ public class Tree extends BTreePrinter {
         return nodeList;
     }
  
-    // This function is for deleting the root node
-    // If the node is not the root, please call the recursive version
     public void delete(int key) {
-        // There should be 6 cases here
-        // Non-root nodes should be forwarded to the static function
+        // find node with this key
         Node node = find(key);
         
         if (root == null) System.out.println("Empty Tree!!!");
         else if (node == null) System.out.println("Key not found!!!");
-        else if (node == root) {
+        else if (node == root) { // root node case
             if (root.left == null && root.right == null) {
                 root = null;
             }
@@ -266,12 +289,13 @@ public class Tree extends BTreePrinter {
                 root = root.left;
             }
             else {
+                // find min of right sub-tree and replace root with that node remove that node
                 Node n = findMin(root.right);
                 root.key = n.key;
-                root.right = null;
+                delete(n);
             }
         }
-        else {
+        else { // not root node case
             delete(node);
         }
         
@@ -281,6 +305,7 @@ public class Tree extends BTreePrinter {
     public static void delete(Node node){
         if (node == null) return;
         
+        // leaf node case 
         if (node.left == null && node.right == null) {
             if (node.key < node.parent.key) {
                 node.parent.left = null;
@@ -291,7 +316,7 @@ public class Tree extends BTreePrinter {
             
             return;
         } 
-        else if (node.left != null && node.right == null) {
+        else if (node.left != null && node.right == null) { // right sub-tree is empty case
             if (node.left.key < node.parent.key) {
                 node.left.parent = node.parent;
                 node.parent.left = node.left;
@@ -302,7 +327,7 @@ public class Tree extends BTreePrinter {
             }
             return;
         }
-        else if (node.right != null && node.left == null) {
+        else if (node.right != null && node.left == null) { // left sub-tree is empty case
             if (node.right.key < node.parent.key) {
                 node.right.parent = node.parent;
                 node.parent.left = node.right;
@@ -313,7 +338,8 @@ public class Tree extends BTreePrinter {
             }
             return;
         }
-        else {
+        else { // full node case
+            // find min of right sub-tree and replace node with it's key and recursively delete it
             Node n = findMin(node.right);
             node.key = n.key;
             delete(n);
