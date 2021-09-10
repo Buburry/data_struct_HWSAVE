@@ -1,7 +1,7 @@
 package hw6;
 
 public class Tree extends BTreePrinter { 
-    Node root;
+    public Node root;
       
     public Tree(Node root){
         this.root = root;
@@ -196,7 +196,7 @@ public class Tree extends BTreePrinter {
 
     public static int height(Node node){
         // get the max of the max of left and right subtrees height and add 1 
-        if (node == null) return 0;
+        if (node == null) return -1;
         return Math.max(height(node.left), height(node.right)) + 1;
     }
     
@@ -232,8 +232,7 @@ public class Tree extends BTreePrinter {
         /*  1. Find the size of the left subtree.
             2. If k is less than the size of the left subtree, then the kth smallest element lies in the left subtree.
             3. If k is greater than the size of the left subtree, then the kth smallest element lies in the right subtree.
-            4. If k is equal to the size of the left subtree, then the kth smallest element is the root.
-        */
+            4. If k is equal to the size of the left subtree, then the kth smallest element is the root.*/
 
         int s = size(node.left);
         if (k == s + 1) return node;

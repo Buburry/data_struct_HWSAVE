@@ -1,7 +1,7 @@
 package hw6;
 public class Node{
-    Node left;
-    Node right;
+    public Node left;
+    public Node right;
     Node parent;
     int key;
     
