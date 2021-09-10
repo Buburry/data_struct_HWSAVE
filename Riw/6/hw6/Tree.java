@@ -229,6 +229,12 @@ public class Tree extends BTreePrinter {
     }
     
     public static Node findKthSmallest(Node node, int k){
+        /*  1. Find the size of the left subtree.
+            2. If k is less than the size of the left subtree, then the kth smallest element lies in the left subtree.
+            3. If k is greater than the size of the left subtree, then the kth smallest element lies in the right subtree.
+            4. If k is equal to the size of the left subtree, then the kth smallest element is the root.
+        */
+
         int s = size(node.left);
         if (k == s + 1) return node;
         
