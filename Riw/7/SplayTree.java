@@ -11,25 +11,27 @@ public class SplayTree extends BTreePrinter{
 
     // zig() function will move up the node x one level
     // Case 1: x == root
-    // Case 2-3: x.parent == root (sig from left, zig from right)
-    // Case 4-5: x.parent != root (sig from left, zig from right)
+    // Case 2-3: x.parent == root (zig from left, zig from right)
+    // Case 4-5: x.parent != root (zig from left, zig from right)
     public void zig(Node x){
         Node y = x.parent;
         if (y == null){
             System.out.println("Cannot perform Zig operation on the root node");
         }
         else if (y == root){ // If the node is a child of the root
-            if (x.key < y.key){// Zig from left
+            if (x.key < y.key){
                 Node t = x.right != null ? x.right : null;
+                // move x to y postion
                 root = x;
                 root.right = y;
                 root.parent = null;
                 y.parent = root;
-                
+                // change inner branch parent
                 y.left = t;
                 if (t != null) t.parent = y;
             }
             else {
+                // same with above just change direction
                 Node t = x.left != null ? x.left : null;
                 root = x;
                 root.left = y;
@@ -45,6 +47,7 @@ public class SplayTree extends BTreePrinter{
                 Node w = y.parent != null ? y.parent : null;
                 Node t = x.right != null ? x.right : null;
                 
+                // move x to y postion
                 if (w.key > x.key) {
                     w.left = x;
                     x.parent = w;
@@ -53,13 +56,16 @@ public class SplayTree extends BTreePrinter{
                     w.right = x;
                     x.parent = w;
                 }
+                // move y to be a child of x
                 x.right = y;
                 y.parent = x;
+                // change inner branch parent
                 y.left = t;
                 if (t != null) t.parent = y;
                 
             }
             else {
+                // same with above just change direction
                 Node w = y.parent != null ? y.parent : null;
                 Node t = x.left != null ? x.left : null;
                 
@@ -98,15 +104,18 @@ public class SplayTree extends BTreePrinter{
     public void splay(Node x){
         while (x != null && x != root){
             Node y = x.parent;
+            // y is root just zig x
             if (y == root){
                 zig(x);
                 break;
             }
             else {
                 Node w = y.parent;   
+                // outer path case
                 if (w.left != null && w.left.left == x || w.right != null && w.right.right == x) {
                     zigzig(x);
                 }
+                // inner path case
                 else if (w.left != null && w.left.right == x || w.right != null && w.right.left == x) {
                     zigzag(x);
                 }
@@ -114,11 +123,10 @@ public class SplayTree extends BTreePrinter{
         }  
     }
     
-    // Modify this function to have the splaying feature
-    // This can be done by calling the splay() function
     public void insert(int key) {
         if (root == null) root = new Node(key);
         else {
+            // loop through untill we find empty for new node
             Node curr = root;
             while (curr != null) {
                 if (curr.left == null && curr.right == null) break;
@@ -140,17 +148,18 @@ public class SplayTree extends BTreePrinter{
                 curr.right = temp;
                 temp.parent = curr;
             }
+            // splay new node to root
             splay(temp);
         }
     }
     
-    // Modify this function to have the splaying feature (if withSplay is true)
-    // This can be done by calling the splay() function
+    // Have the splaying feature (if withSplay is true)
     public Node find(int search_key, boolean withSplay){
         Node curr = root;
+        // loop through tree and compare key till we find the node
         while (curr != null) {
             if (curr.key == search_key) {
-                if (withSplay) splay(curr);
+                if (withSplay) splay(curr); // splay when we found the node
                 return curr;
             }
             else if (search_key < curr.key) curr = curr.left;
@@ -159,21 +168,23 @@ public class SplayTree extends BTreePrinter{
         return curr;
     }
     
-    // This delete() is different than what you learned in BSTree and AVLTree before
-    // Use the algorithm learned in the class to implement this function
     public void delete(int key) {
         if (root.left == null && root.right == null && key == root.key) {
             root = null;
             return;
         }
+        // splay the node that we're deleting to root 
         splay(find(key, false));
         Node leftSub = root.left ;
         Node rightSub = root.right;
+        // find min of right subtree
         Node curr = rightSub;
         while (curr != null && curr.left != null) {
             curr = curr.left;
         }
+        // splay min of right subtree to root
         splay(curr);
+        // reattach left subtree to new root
         root.left = leftSub;
         if (leftSub != null) leftSub.parent = root;
     }

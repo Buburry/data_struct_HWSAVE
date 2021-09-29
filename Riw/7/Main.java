@@ -221,6 +221,7 @@ public class Main {
         tree1.merge(tree2);
         tree1.printTree();
 */
+/*
         AVLTree tree1 = new AVLTree();
         int[] keyList = {4, 2, 6, 1, 3, 5, 8, 7, 9};
         for (int i=0; i<keyList.length; i++)

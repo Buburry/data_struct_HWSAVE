@@ -1,9 +1,8 @@
 public class BSTree2 extends BTreePrinter{
     Node root;
     
-    // Implement this function using iterative method
-    // Do not use recursion
     public Node find(int search_key){
+        // loop through tree and compare key till we find the node
         Node curr = root;
         while (curr != null) {
             if (curr.key == search_key) return curr;
@@ -14,33 +13,29 @@ public class BSTree2 extends BTreePrinter{
         return curr;
     }
 
-    // Implement this function using iterative method
-    // Do not use recursion
     public Node findMin(){
+        // go to leftmost node of the tree
         Node curr = root;
         while (curr.left != null) {
             curr = curr.left;
         }
-        return curr; // Fix this
+        return curr;
     }
 
-    // Implement this function using iterative method
-    // Do not use recursion
     public Node findMax(){
+        // go to rightmost node of the tree
         Node curr = root;
         while (curr.right != null) {
             curr = curr.right;
         }
-        return curr; // Fix this
+        return curr; 
     }
     
-    // Implement this function using iterative method
-    // Do not use recursion
     public void insert(int key) {
         if (root == null) root = new Node(key);
         else {
+            // loop through untill we find empty for new node
             Node curr = root;
-            
             while (curr != null) {
                 if (curr.left == null && curr.right == null) break;
                 if (key < curr.key) {
@@ -52,7 +47,6 @@ public class BSTree2 extends BTreePrinter{
                     else curr = curr.right;
                 }
             }
-            
             if (key < curr.key) {
                 Node temp = new Node(key);
                 curr.left = temp;
